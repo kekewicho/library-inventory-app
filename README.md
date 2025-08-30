@@ -37,3 +37,9 @@ python manage.py runserver
 ## 4. Accede a la aplicacion desde tu navegador
 
 Accede a la ruta [/inventory](http://localhost:8000/inventory)
+
+
+
+# Funcionamiento
+
+[IMG1](static\evidencia\Captura de pantalla 2025-08-30 145647.png)
