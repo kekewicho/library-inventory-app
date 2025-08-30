@@ -1,3 +1,10 @@
+# Library Inventory App
+
+By:
+- Luis Ruben Ramos Cortes
+- Ruben Jimenez Navarro
+
+
 # Instrucciones de ejecucion
 
 > ⚠️ **Antes de comenzar asegurate de tener Python 3 y pip instalados**
