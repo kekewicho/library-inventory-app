@@ -1,0 +1,118 @@
+{% extends 'inventory/layout.html' %}
+
+{% block content %}
+<div class="py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h3 class="text-2xl">Tu lista de libros</h3>
+        <button id="open-create-book-modal" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+            Crear Libro
+        </button>
+    </div>
+    
+    <div class="py-5">
+        {% include 'inventory/fragments/books/table.html' %}
+    </div>
+</div>
+
+<div id="create-book-modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+    <div class="flex items-center justify-center min-h-screen px-4 py-6 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+            <div class="sm:flex sm:items-start">
+                <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                        Crear Nuevo Libro
+                    </h3>
+                    <div class="mt-2">
+                        <form action="{% url 'book_create' %}" method="post">
+                            {% csrf_token %}
+                            
+                            <div>
+                                <label for="{{ form.title.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                    {{ form.title.label }}
+                                </label>
+                                <div class="mt-1">
+                                    {{ form.title }}
+                                    {% if form.title.errors %}
+                                        <div class="text-red-600 text-xs mt-1">
+                                            {% for error in form.title.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <label for="{{ form.autor.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                    {{ form.autor.label }}
+                                </label>
+                                <div class="mt-1">
+                                    {{ form.autor }}
+                                    {% if form.autor.errors %}
+                                        <div class="text-red-600 text-xs mt-1">
+                                            {% for error in form.autor.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <label for="{{ form.stock.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                    {{ form.stock.label }}
+                                </label>
+                                <div class="mt-1">
+                                    {{ form.stock }}
+                                    {% if form.stock.errors %}
+                                        <div class="text-red-600 text-xs mt-1">
+                                            {% for error in form.stock.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="mt-5 sm:mt-6 sm:flex sm:flex-row-reverse">
+                                <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                    Guardar Libro
+                                </button>
+                                <button type="button" id="close-create-book-modal" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const openCreateBookModalButton = document.getElementById('open-create-book-modal');
+    const closeCreateBookModalButton = document.getElementById('close-create-book-modal');
+    const createBookModal = document.getElementById('create-book-modal');
+
+    openCreateBookModalButton.addEventListener('click', () => {
+        createBookModal.classList.remove('hidden');
+    });
+
+    closeCreateBookModalButton.addEventListener('click', () => {
+        createBookModal.classList.add('hidden');
+    });
+
+    // Cierra el modal si se hace clic fuera de él
+    window.addEventListener('click', (event) => {
+        if (event.target === createBookModal) {
+            createBookModal.classList.add('hidden');
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,40 @@
+<table class="w-full text-sm text-left rtl:text-right text-gray-500">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+        <tr>
+            <th scope="col" class="px-6 py-3">
+                Name
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Have been funado?
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Books written
+            </th>
+            <th scope="col" class="px-6 py-3"></th>
+            <th scope="col" class="px-6 py-3"></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for author in authors %}
+        <tr class="bg-white border-b border-gray-200 font-medium">
+            <th scope="row" class="px-6 py-4  text-gray-900 whitespace-nowrap">
+                {{ author.name }}
+            </th>
+            <td class="px-6 py-4">
+                {% if author.funado %} Si :( {% else %} Nop {% endif %}
+            </td>
+            <td class="px-6 py-4">
+                {{ author.count_libros }} book(s)
+            </td>
+            <td class="px-6 py-4">
+                <a href="{% url 'author_detail' id=author.id %}" class="p-3 w-full bg-cyan-900 text-white font-bold">View</a>
+            </td>
+            <td class="px-6 py-4">
+                <a href="{% url 'author_delete' id=author.id %}" class="p-3 w-full bg-red-800 text-white font-bold">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>

@@ -1,0 +1,108 @@
+{% extends 'inventory/layout.html' %}
+
+{% block content %}
+<div class="prose py-8">
+    <h1>Detalle del autor: {{ author.name }}</h1>
+    
+    <p>
+        <strong>¿Autor funado?</strong> 
+        {% if author.funado %}
+            Sí
+        {% else %}
+            No
+        {% endif %}
+    </p>
+
+    <div class="flex space-x-4 mb-8">
+        <button id="open-modal-button" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            Editar
+        </button>
+        
+    </div>
+
+    <hr>
+
+    <h3>Libros escritos por {{ author.name }}</h3>
+
+    {% if books|length > 0 %}
+        <ul role="list" class="divide-y divide-gray-200">
+            {% for libro in books %}
+                <li class="py-4">
+                    <a class="block hover:bg-gray-50">
+                        <p class="font-semibold">{{ libro.title }}</p>
+                        <p class="text-sm text-gray-500">Stock disponible: {{ libro.stock }}</p>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-gray-500">Este autor aún no tiene libros registrados.</p>
+    {% endif %}
+</div>
+
+<div id="edit-author-modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+    <div class="flex items-center justify-center min-h-screen px-4 py-6 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+            <div class="sm:flex sm:items-start">
+                <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                        Editar autor
+                    </h3>
+                    <div class="mt-2">
+                        <form action="{% url 'author_update' id=author.id %}" method="post">
+                            {% csrf_token %}
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700">Nombre del autor</label>
+                                <div class="mt-1">
+                                    <input type="text" name="name" id="name" value="{{ author.name }}" required class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <label for="funado" class="inline-flex items-center">
+                                    <input type="checkbox" name="funado" id="funado" {% if author.funado %}checked{% endif %} class="h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                    <span class="ml-2 block text-sm text-gray-900">¿Autor funado?</span>
+                                </label>
+                            </div>
+                            
+                            <div class="mt-5 sm:mt-6 sm:flex sm:flex-row-reverse">
+                                <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                    Guardar cambios
+                                </button>
+                                <button type="button" id="close-modal-button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const openModalButton = document.getElementById('open-modal-button');
+    const closeModalButton = document.getElementById('close-modal-button');
+    const modal = document.getElementById('edit-author-modal');
+
+    openModalButton.addEventListener('click', () => {
+        modal.classList.remove('hidden');
+    });
+
+    closeModalButton.addEventListener('click', () => {
+        modal.classList.add('hidden');
+    });
+
+    // Cierra el modal si se hace clic fuera de él
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.classList.add('hidden');
+        }
+    });
+</script>
+{% endblock %}

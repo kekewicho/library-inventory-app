@@ -1,0 +1,108 @@
+{% extends 'inventory/layout.html' %}
+
+{% block content %}
+<div class="py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h3 class="text-2xl">Tu lista de autores</h3>
+        <button id="open-create-author-modal" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+            Crear Autor
+        </button>
+    </div>
+    
+    <div class="py-5">
+        {% include 'inventory/fragments/authors/table.html' %}
+    </div>
+</div>
+
+<div id="create-author-modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+    <div class="flex items-center justify-center min-h-screen px-4 py-6 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+            <div class="sm:flex sm:items-start">
+                <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                        Crear Nuevo Autor
+                    </h3>
+                    <div class="mt-2">
+                        <form action="{% url 'author_create' %}" method="post">
+                            {% csrf_token %}
+                            
+                            <div>
+                                <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                                    {{ form.name.label }}
+                                </label>
+                                <div class="mt-1">
+                                    {{ form.name }}
+                                    {% if form.name.errors %}
+                                        <div class="text-red-600 text-xs mt-1">
+                                            {% for error in form.name.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <label for="{{ form.funado.id_for_label }}" class="inline-flex items-center">
+                                    {{ form.funado }}
+                                    <span class="ml-2 block text-sm text-gray-900">{{ form.funado.label }}</span>
+                                </label>
+                                {% if form.funado.errors %}
+                                    <div class="text-red-600 text-xs mt-1">
+                                        {% for error in form.funado.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            {% if form.non_field_errors %}
+                                <div class="text-red-600 text-xs mt-4">
+                                    {% for error in form.non_field_errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            
+                            <div class="mt-5 sm:mt-6 sm:flex sm:flex-row-reverse">
+                                <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                    Guardar Autor
+                                </button>
+                                <button type="button" id="close-create-author-modal" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const openCreateAuthorModalButton = document.getElementById('open-create-author-modal');
+    const closeCreateAuthorModalButton = document.getElementById('close-create-author-modal');
+    const createAuthorModal = document.getElementById('create-author-modal');
+
+    openCreateAuthorModalButton.addEventListener('click', () => {
+        createAuthorModal.classList.remove('hidden');
+    });
+
+    closeCreateAuthorModalButton.addEventListener('click', () => {
+        createAuthorModal.classList.add('hidden');
+    });
+
+    // Cierra el modal si se hace clic fuera de él
+    window.addEventListener('click', (event) => {
+        if (event.target === createAuthorModal) {
+            createAuthorModal.classList.add('hidden');
+        }
+    });
+</script>
+{% endblock %}

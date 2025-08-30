@@ -1,0 +1,41 @@
+<table class="w-full text-sm text-left rtl:text-right text-gray-500">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+        <tr>
+            <th scope="col" class="px-6 py-3">
+                Title
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Writed by
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Stock
+            </th>
+            <th scope="col" class="px-6 py-3"></th>
+            <th scope="col" class="px-6 py-3"></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        {% for book in books %}
+        <tr class="bg-white border-b border-gray-200 font-medium">
+            <th scope="row" class="px-6 py-4  text-gray-900 whitespace-nowrap">
+                {{ book.title }}
+            </th>
+            <td class="px-6 py-4">
+                {{ book.autor.name }}
+            </td>
+            <td class="px-6 py-4 flex flex-col">
+                <span>{{ book.stock }} available</span>
+                <span class="text-xs text-neutral-400">Updated on {{ book.last_update }}</span>
+            </td>
+            <td class="px-6 py-4">
+                <a href="{% url 'book_detail' pk=book.id %}" class="p-3 w-full bg-cyan-900 text-white font-bold">View</a>
+            </td>
+            <td class="px-6 py-4">
+                <a href="{% url 'book_delete' pk=book.id %}" class="p-3 w-full bg-red-800 text-white font-bold">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table>
